@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <div class = main_box>
+      <div class = "error-box">
+        <% if user_signed_in? %>
+          </div>
+          <%= render 'layouts/header' %>
+          <%= yield %>
+          <%= render 'layouts/footer' %>
+        <%else %>
+          <%= render 'layouts/messages' %>
+          </div>
+          <%= yield %>
+        <% end %>
+      </div>
+  </body>
+</html>
