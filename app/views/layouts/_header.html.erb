@@ -1,21 +1,23 @@
 <div class= 'header_box'>
   <nav class="navbar navbar-inverse">
     <div id="navbar">
-        <ul class="nav navbar-nav">
-          <li><%= link_to 'About Us', root_path %></li>
-        </ul>
-        <ul class="nav navbar-nav">
-          <li><%= link_to 'Contact Us', contacts_new_path %></li>
-        </ul>
-        <ul class="nav navbar-nav">
-          <li><%= link_to 'Gallery', user_galleries_path(current_user)%></li>
-        </ul>
-        <ul class="nav navbar-nav">
-          <li><%= link_to "LOG OUT", destroy_user_session_path, method: :delete %></li>
-        </ul>
-        <ul class="nav navbar-nav">
-          <%= link_to "My Account", edit_user_registration_path %>
-        </ul>
-       </div>
+      <ul class="nav navbar-nav">
+        <li><%= link_to 'About Us', root_path %></li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li><%= link_to 'Contact Us', contacts_new_path %></li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li><%= link_to 'Gallery', user_galleries_path(current_user)%></li>
+      </ul>
+    </div>
+    <div id = "logout-right">
+      <ul class="nav navbar-nav">
+        <li><%= link_to "My Account", edit_user_registration_path %></li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li><%= link_to "LOG OUT", destroy_user_session_path, method: :delete %></li>
+      </ul>
+    </div>
   </nav>
 </div>
