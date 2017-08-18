@@ -1,0 +1,38 @@
+<%= form_for [@user, @gallery], remote: true, html: { multipart: true } do |f| %>
+
+  <% if @gallery.errors.any? %>
+    <div class="panel panel-warning errors">
+      <div class="panel-heading">
+        <h5><i class="glyphicon glyphicon-exclamation-sign"></i> Errors Found.Could not save it.</h5>
+      </div>
+
+      <ul class="panel-body">
+        <% @gallery.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+  </div>
+
+  <%= f.submit 'Update', class: 'btn btn-primary' %>
+<% end %>
+
+<script>
+  $(document).ready(function() {
+    var user_id = <%=j @user.id.to_s %>;
+    $(".edit_gallery").validate({
+      debug: true,
+      rules: {
+        "gallery[name]": {required: true, remote:"/users/user_id/galleries/check_name"}
+      },
+      messages: {
+        "gallery[name]": "Image Name already exists"
+      }
+    });
+  });
+</script>

@@ -1,0 +1,29 @@
+<% galleries.each do |gallery| %>
+  <div class = "photo-box">
+    <div class="row">
+      <div class="col-xs-4"></div>
+      <div class="col-xs-4" style="display:inline; background-color:#E0E0E0;width:33%">
+        <%= div_for gallery do %>
+        <div class="panel">
+          <%= image_tag gallery.image.url(:large) %><br/>
+          <p><%= gallery.name %></p>
+          <%= link_to "Edit", edit_user_gallery_path(@user, gallery), remote: true %><br/>
+        </div>
+        <% end %>
+      </div>
+      <div class="col-xs-4"></div>
+    </div>
+  </div>
+<% end %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-4"></div>
+    <div class="col-xs-4">
+      <div class="pagination">
+        <%= paginate @galleries %>
+      </div>
+    </div>
+    <div class="col-xs-4"></div>
+  </div>
+</div>

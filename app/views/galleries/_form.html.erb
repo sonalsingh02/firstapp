@@ -1,0 +1,33 @@
+<%= form_for [@user, @gallery], remote: true, html: { multipart: true } do |f| %>
+  <% if @gallery.errors.any? %>
+    <%= render 'shared/errors', object: @gallery  %>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :image %>
+    <%= f.file_field :image, class: 'form-control'%>
+  </div>
+
+  <%= f.submit 'Upload', class: 'btn btn-primary' %>
+<% end %>
+
+<script>
+  $(document).ready(function() {
+    var user_id = <%=j @user.id.to_s %>;
+    $("#new_gallery").validate({
+      debug: true,
+      rules: {
+        "gallery[name]": {required: true, remote:"/users/user_id/galleries/check_name"},
+        "gallery[image]": {required: true, accept: "image/*"}
+      },
+      messages: {
+        "gallery[name]": "Image Name already exists"
+      }
+    });
+  });
+</script>

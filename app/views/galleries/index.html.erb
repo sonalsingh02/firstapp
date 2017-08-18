@@ -1,0 +1,13 @@
+<div class = "content-box">
+  <div class='container' style="width:60%;">
+    <div class="row">
+      <div class="col-xs-4">
+        <%= link_to "Upload New Image", new_user_gallery_path, remote: true, class: "new-task-button btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <div class="container gallery-box">
+    <%= render 'galleries/gallery', galleries: @galleries %>
+  </div>
+</div>
