@@ -8,7 +8,7 @@
           <li><%= link_to 'Contact Us', contacts_new_path %></li>
         </ul>
         <ul class="nav navbar-nav">
-          <li><%= link_to 'Gallery', home_gallery_path %></li>
+          <li><%= link_to 'Gallery', user_galleries_path(current_user)%></li>
         </ul>
         <ul class="nav navbar-nav">
           <li><%= link_to "LOG OUT", destroy_user_session_path, method: :delete %></li>
