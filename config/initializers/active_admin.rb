@@ -8,7 +8,7 @@ ActiveAdmin.setup do |config|
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
-  #
+  config.skip_before_action :authenticate_user!
   # config.site_title_link = "/"
 
   # Set an optional image to be displayed for the header
@@ -171,7 +171,7 @@ ActiveAdmin.setup do |config|
   # tag. You can reset the hash of meta tags included in logged out
   # pages:
   #   config.meta_tags_for_logged_out_pages = {}
-
+  #config.skip_before_action :authenticate_user!
   # == Removing Breadcrumbs
   #
   # Breadcrumbs are enabled by default. You can customize them for individual

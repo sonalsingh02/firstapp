@@ -9,5 +9,5 @@ class AdminUser < ApplicationRecord
 	#end 
 	def after_confirmation
     	redirect_to root_url
-  end
+  	end
 end

@@ -6,8 +6,9 @@ Rails.application.routes.draw do
   get 'contacts/create'
   get 'contacts/new'
   #get 'home/gallery'
-  devise_for :admin_users, ActiveAdmin::Devise.config
+  
   ActiveAdmin.routes(self)
+  devise_for :admin_users, ActiveAdmin::Devise.config   
   root to: 'home#index'
   devise_for :users, controllers: {registrations: 'registrations'}
   resources "contacts", only: [:new, :create]
