@@ -16,7 +16,7 @@ $(document).ready(function() {
     rules: {
       "contact[email]": {required: true, email: true},
       "contact[name]": {required: true},
-      "contact[mobile_number]": {required: true, minlength: 10, maxlength: 15},
+      "contact[mobile_number]": {required: true,  integer: true, minlength: 10, maxlength: 15},
       "contact[message]": {required: true}
     },
     submitHandler: function(form){

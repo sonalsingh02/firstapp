@@ -142,9 +142,7 @@ html,body{
  }
  #dialog_container{
  	margin-top :15%;
-
-
- }
+}
 
  .alert{
 
@@ -170,7 +168,10 @@ html,body{
 footer{
 background: #f7f7f7;
 padding: 50px 20px; 
-margin-top: 12%;
+}
+
+.footer_box{
+	margin-top: 14%;
 }
 
 footer ul, footer p{
@@ -228,6 +229,23 @@ div.gallery:hover {
     float: left;
     width: 40%;
 }
+nav .navbar-right > li > a {
+	color: #9d9d9d;
+}
+.nav navbar-right:hover{
+	background-color: none !important;
+}
+.navbar-right {
+    float: right !important;
+    margin-right: 0 !important;
+  }
+/*--------email format css -----------*/
+
+.wrapper{width:60%; margin:5% auto;height:100vh;  box-shadow:0 0 2px #aaa; font-family:Hind;}
+.logo_header{width:100%; height:70px;background:#1CA8DD; padding:10px;}
+.email_body{width:100%; padding:0 15px;}
+/*------------------------------------*/
+
 .hidden { display: none; }
 /*-----------------------*/
 @media (max-width: 767px){

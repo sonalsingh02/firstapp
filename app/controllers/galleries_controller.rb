@@ -3,7 +3,7 @@ class GalleriesController < ApplicationController
   before_action :find_gallery, only: [:edit, :update]
 
   def index
-    @galleries = @user.galleries.page(params[:page]).per(2)
+    @galleries = @user.galleries.page(params[:page]).order('created_at DESC').per(2)
   end
 
   def new
@@ -17,7 +17,7 @@ class GalleriesController < ApplicationController
   def create
     @gallery = @user.galleries.build(gallery_params)
     if @gallery.save
-      @galleries = Gallery.page(params[:page]).per(2)
+      @galleries = @user.galleries.page(params[:page]).order('created_at DESC').per(2)
       respond_to do |format|
         format.js
       end
