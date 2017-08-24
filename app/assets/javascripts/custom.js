@@ -10,7 +10,17 @@ $(document).ready(function() {
       form.submit();
     }
   });
-  
+  $("#edit_user").validate({
+    debug: true,
+    rules: {
+      "user[password]": {required: true, minlength: 6},
+      "user[password_confirmation]": {required: true, equalTo: "#user_password"}
+      "user[current_password]": {required: true, minlength: 6},
+    },
+    submitHandler: function(form){
+      form.submit();
+    }
+  });
   $("#new_contact").validate({
     debug: true,
     rules: {
