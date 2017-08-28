@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo</title>
+      <%= csrf_meta_tags %>
+      <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+      <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+      <%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js' %>
+      <%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js' %>
+  </head>
+
+  <body>
+    <div class = main_box>
+      <div class = "error-box">
+        <% if user_signed_in? %>
+          </div>
+          <%= render 'layouts/header' %>
+          <div class='notice'>
+            <% if notice %>
+              <p style="width:20%;"class="alert alert-success text-center"><%= notice %></p>
+            <% end %>
+            <% if alert %>
+              <p class="alert alert-danger text-center"><%= alert %></p>
+            <% end %>
+          </div>
+          <%= yield %>
+          <%= render 'layouts/footer' %>
+        <%else %>
+          <%= render 'layouts/messages' %>
+          </div>
+          <%= yield %>
+        <% end %>
+      </div>
+  </body>
+</html>

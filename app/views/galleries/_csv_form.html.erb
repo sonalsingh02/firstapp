@@ -1,0 +1,31 @@
+<%= form_tag import_user_galleries_path, remote: true, multipart: true, id: 'csv_form' do %>
+  <% if @errors.present? %>
+    <div class="panel panel-warning errors">
+      <div class="panel-heading">
+        <h5><i class="glyphicon glyphicon-exclamation-sign"></i> Found errors while saving</h5>
+      </div>
+
+      <ul class="panel-body">
+        <% @errors.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <%= label_tag :file, "Upload File", class: "form-label" %>
+    <%= file_field_tag :file, class: "form-control" %>
+  </div>
+  <%= submit_tag "Import CSV", class: 'btn btn-primary' %>
+<% end %>
+
+<script>
+  $(document).ready(function() {
+    $("#csv_form").validate({
+      debug: true,
+      rules: {
+        "file": {required: true, accept: "text/csv"}
+      }
+    });
+  });
+</script>
