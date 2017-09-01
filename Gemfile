@@ -11,6 +11,7 @@ gem 'rails', '~> 5.1.1'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 gem "paperclip", "~> 4.2"
+gem 'sidekiq'
  gem 'record_tag_helper', '~> 1.0'
 gem 'devise'
 gem 'mail_form'
@@ -49,6 +50,7 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
+  gem 'pry'
 end
 
 group :development do

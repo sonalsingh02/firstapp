@@ -22,6 +22,11 @@
             <% if alert %>
               <p class="alert alert-danger text-center"><%= alert %></p>
             <% end %>
+            <% if @errors %>
+              <% @errors.each do |message| %>
+                <%= message %>
+              <% end %>
+            <% end %>
           </div>
           <%= yield %>
           <%= render 'layouts/footer' %>

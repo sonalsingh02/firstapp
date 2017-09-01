@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     resources :galleries do
       collection do
         get :check_name
-        get :import_form
+        get :import_csv_form
         post :import
       end
     end

@@ -4,26 +4,15 @@ class User < ApplicationRecord
   after_create :send_email
   has_many :galleries
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :trackable, :validatable
 
-  #def confirm!
-   # welcome_message
-    #super
-  #end
-
+  
   def password_required?
     new_record? ? false : super
   end
 
-  def send_on_create_confirmation_instructions
-  
-  end
-
   private
 
-  #def welcome_message
-   # UserMailer.welcome_message(self).deliver
-  #end
   def send_email
     self.update_attributes(:password => generate_password)
     AcknowledgementMailer.registration_mail(self).deliver_now

@@ -1,8 +1,10 @@
+
 <div class = "content-box">
   <div class='container' style="width:60%;">
     <div class="row">
       <div class="col-xs-4">
-        <%= link_to "Upload New Image", new_user_gallery_path, remote: true, class: "new-task-button btn btn-primary" %>
+        <%= link_to "Upload New Image", new_user_gallery_path, remote: true, class: "new-img-btn btn btn-primary" %>
+        <%= link_to "Upload CSV", import_csv_form_user_galleries_path, remote: true, class: "new-csv-btn btn btn-primary" %> <br />
       </div>
     </div>
   </div>
