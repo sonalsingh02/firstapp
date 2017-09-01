@@ -1,7 +1,8 @@
 class GalleriesController < ApplicationController
   before_action :find_current_user
   before_action :find_gallery, only: [:edit, :update]
-  require 'uri'
+    require 'uri'
+
 
   def index
     @galleries = @user.galleries.page(params[:page]).order('created_at DESC').per(2)
@@ -29,7 +30,9 @@ class GalleriesController < ApplicationController
     end
   end
 
-  def edit; 
+  
+  def edit;
+
   end
 
   def update
@@ -58,6 +61,7 @@ class GalleriesController < ApplicationController
   end
 
   def import
+<<<<<<< HEAD
   # To validate headers in csv file
     @file = params[:file].path
     validate_header
@@ -82,6 +86,11 @@ class GalleriesController < ApplicationController
     end
   end
   
+=======
+    @user.galleries.import(params[:file])
+    redirect_to user_galleries_url(@user), notice: "Galleries are imported successfully."
+  end
+>>>>>>> d60ebda7dd4355b1edf94bb707631764016bc6b6
 
   private
 
@@ -98,6 +107,7 @@ class GalleriesController < ApplicationController
   def find_gallery
     @gallery = @user.galleries.find_by(id: params[:id])
   end
+<<<<<<< HEAD
 
   #validation of header in a csv file
   def validate_header
@@ -350,6 +360,3 @@ class GalleriesController < ApplicationController
     end
   end
 end
-
-
-                                                                                                                                                  

@@ -21,3 +21,10 @@
 /yarn-error.log
 
 .byebug_history
+<<<<<<< HEAD
+=======
+public/*
+tmp/**/*
+log/*.log
+config/environments/development.rb
+>>>>>>> d60ebda7dd4355b1edf94bb707631764016bc6b6
