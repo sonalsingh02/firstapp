@@ -1,11 +1,7 @@
 class Gallery < ApplicationRecord
   require 'csv'
   belongs_to :user
-<<<<<<< HEAD
   validates :name, presence: true, uniqueness: true
-=======
-  validates :name, presence: true
->>>>>>> d60ebda7dd4355b1edf94bb707631764016bc6b6
   has_attached_file :image, styles: { small: "64x64", med: "100x100", large: "200x200" },
                             :url  => "/assets/products/:id/:style/:basename.:extension",
                             :path => ":rails_root/public/assets/products/:id/:style/:basename.:extension"
@@ -13,7 +9,6 @@ class Gallery < ApplicationRecord
   paginates_per  2
 
   def self.import(file)
-<<<<<<< HEAD
     @errors = []
     CSV.foreach(file.path, headers: true) do |row|
       Rails.logger.info("in for each")
@@ -34,10 +29,5 @@ class Gallery < ApplicationRecord
       end
     end
     return @errors
-=======
-    CSV.foreach(file.path, headers: true) do |row|
-      Gallery.create! row.to_hash
-    end
->>>>>>> d60ebda7dd4355b1edf94bb707631764016bc6b6
   end
 end
