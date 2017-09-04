@@ -26,6 +26,30 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  namespace :api do
+    namespace :v1 do
+      resources :gallery_pictures, only: [] do
+        collection do
+          post :upload
+        end
+        member do
+          get :retrieve
+        end
+      end
+      resources :contacts, only: [] do
+        member do
+          post :create_contact
+        end
+      end
+      resources :users, only: [] do
+        member do
+          post :create_user
+        end
+      end
+    end
+  end
+
   #config/routes.rb
   #devise_for :users, :controllers => { :registrations => "registrations" }
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
