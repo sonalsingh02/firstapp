@@ -10,15 +10,10 @@ Rails.application.routes.draw do
   get 'contacts/create'
   get 'contacts/new'
   #get 'home/gallery'
-<<<<<<< HEAD
-  
-  ActiveAdmin.routes(self)
-  devise_for :admin_users, ActiveAdmin::Devise.config   
-=======
+
 
   ActiveAdmin.routes(self)
   devise_for :admin_users, ActiveAdmin::Devise.config
->>>>>>> d60ebda7dd4355b1edf94bb707631764016bc6b6
   root to: 'home#index'
   devise_for :users, controllers: {registrations: 'registrations'}
   resources "contacts", only: [:new, :create]
