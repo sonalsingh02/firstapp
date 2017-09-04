@@ -30,7 +30,7 @@ class GalleriesController < ApplicationController
     end
   end
 
-  
+
   def edit;
 
   end
@@ -61,15 +61,50 @@ class GalleriesController < ApplicationController
   end
 
   def import
-<<<<<<< HEAD
   # To validate headers in csv file
     @file = params[:file].path
     validate_header
-    validate_csv_data if !@errors.any?
-    
-    if !@errors.any?
-      @errors  = @user.galleries.import(params[:file])
+    #validate data of csv if headers are valid
+    @row = []
+    @import_count = 0
+    @failed_import = 0
+    @failed_format = 0
+    CSV.foreach(@file,encoding:'iso-8859-1:utf-8', col_sep: ';') do |row|
+      @row << row
     end
+    if @row.length > 1 && !@errors.any?# data exists more than header
+      @row.each_with_index do |row, index|
+        next if index == 0
+        @errors = validate_csv_data(row,index)
+        Rails.logger.info("************** #{row}")
+        Rails.logger.info("************ #{@errors}")
+        if !@errors.present?
+          Rails.logger.info("YES*******")
+          Rails.logger.info(index)
+          Rails.logger.info(row)
+          params = row.first.split(",")
+          begin
+            @gallery = @user.galleries.build(name: params[0], image: params[1])
+          rescue
+            
+          end
+          begin
+            if @gallery.save
+              @import_count += 1
+            end
+          rescue 
+            Rails.logger.info("EXCEPTION")
+            @failed_import += 1
+          end
+        else
+          @failed_format +=1
+        end
+      end
+    else
+      Rails.logger.info("MISSSING")
+      @errors << "Content is missing"
+    end
+
     Rails.logger.info("*********************")
     Rails.logger.info(@errors.inspect)
     Rails.logger.info("*********************")
@@ -82,17 +117,19 @@ class GalleriesController < ApplicationController
         format.js
       end
     else
-      redirect_to user_galleries_url(@user), notice: "Galleries are imported successfully."
+      if @import_count >= 1 && @failed_import >= 1 && @failed_format >= 1
+        @msg = "#{@import_count} rows are imported sucessfully , #{@failed_import} rows could not be imported as the file is missing and #{@failed_format} rows could not be validated and imported"
+      elsif @failed_import >= 1 && @import_count >= 1 && @failed_format == 0
+        @msg = "#{@import_count} rows are imported sucessfully , #{@failed_import} rows could not be imported as the file is missing"
+      elsif @import_count >= 1 && @failed_import == 0 && @failed_format == 0
+        Rails.logger.info("edgtedfedsfesfewsfs")
+        @msg = "#{@import_count} rows are imported sucessfully"
+      end
+      redirect_to user_galleries_url(@user), notice: "#{@msg}"
     end
   end
-  
-=======
-    @user.galleries.import(params[:file])
-    redirect_to user_galleries_url(@user), notice: "Galleries are imported successfully."
-  end
->>>>>>> d60ebda7dd4355b1edf94bb707631764016bc6b6
 
-  private
+private
 
   def gallery_params
     params.require(:gallery).permit(
@@ -107,13 +144,12 @@ class GalleriesController < ApplicationController
   def find_gallery
     @gallery = @user.galleries.find_by(id: params[:id])
   end
-<<<<<<< HEAD
 
   #validation of header in a csv file
   def validate_header
     Rails.logger.info("In Header ..................")
     allowed_attributes = %w(name image)
-    @file = params[:file].path
+    #@file = params[:file].path
     @errors = []
     @headers = CSV.open(@file,'r') { |csv| csv.first } #To find first row of csv file i.e. header
     #############################
@@ -143,7 +179,7 @@ class GalleriesController < ApplicationController
           Rails.logger.info("count < 0")
           Rails.logger.info("*******************************")
           #in this case we will check if header data is proper or not
-          if allowed_attributes[0].downcase != @headers[0].try(:downcase) 
+          if allowed_attributes[0].downcase != @headers[0].try(:downcase)
             @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
           end
           if allowed_attributes[1].downcase != @headers[1].try(:downcase)
@@ -184,7 +220,7 @@ class GalleriesController < ApplicationController
           Rails.logger.info("count < 0")
           Rails.logger.info("*******************************")
           #in this case we will check if header data is proper or not
-          if allowed_attributes[0].downcase != @headers[0].try(:downcase) 
+          if allowed_attributes[0].downcase != @headers[0].try(:downcase)
             @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
           end
           if allowed_attributes[1].downcase != @headers[1].try(:downcase)
@@ -246,7 +282,7 @@ class GalleriesController < ApplicationController
     else
       #binding.pry
       # Rails.logger.info("elseeeee")
-      
+
       @errors << "CSV file is empty"
     end
     @errors
@@ -311,52 +347,40 @@ class GalleriesController < ApplicationController
   end
 
   #validation of data in a csv file
-  def validate_csv_data
-    @row = []
-    CSV.foreach(@file,encoding:'iso-8859-1:utf-8', col_sep: ';') do |row|
-      @row << row
-    end
-    if @row.length > 1 # data exists more than header
-      @row.each_with_index do |row, index|
-      next if index == 0
-        if row.any? && !row.empty?
-          Rails.logger.info(row.inspect)
-          row = row.first.split(",")
-          Rails.logger.info("row.length")
-          Rails.logger.info(row.inspect)
-          if @row.length  == 2
-            if row.length == 1 # if true that means either name data is missing or image data is missing
-              check_value(row,index+1)
-            end
-            if row.length == 2
-              validate_name(row,index+1)
-              validate_image(row,index+1)
-            end
-            if row.length > 2
-              @errors << "Data is more than what is expected"
-            end
-          elsif @row.length  > 2
-            if row.length == 1 # if true that means either name data is missing or image data is missing
-              check_value(row,index+1)
-            end
-            if row.length == 2
-              validate_name(row,index+1)
-              validate_image(row,index+1)
-            end
-            if row.length > 2
-              @errors << "Data is more than what is expected"
-            end
-          else
-             @errors << "Content is missing"
-          end
-        else
-          Rails.logger.info("MISSSING")
-          @errors << "Content is missing"
+  def validate_csv_data(row,index)
+    if row.any? && !row.empty?
+      Rails.logger.info(row.inspect)
+      row = row.first.split(",")
+      Rails.logger.info("row.length")
+      Rails.logger.info(row.inspect)
+      if @row.length  == 2
+        if row.length == 1 # if true that means either name data is missing or image data is missing
+          check_value(row,index+1)
         end
+        if row.length == 2
+          validate_name(row,index+1)
+          validate_image(row,index+1)
+        end
+        if row.length > 2
+          @errors << "Data is more than what is expected"
+        end
+      elsif @row.length  > 2
+        if row.length == 1 # if true that means either name data is missing or image data is missing
+          check_value(row,index+1)
+        end
+        if row.length == 2
+          validate_name(row,index+1)
+          validate_image(row,index+1)
+        end
+        if row.length > 2
+          @errors << "Data is more than what is expected"
+        end
+      else
+        @errors << "Content is missing"
       end
     else
       Rails.logger.info("MISSSING")
-      @errors << "Content is missing"
+        @errors << "Content is missing"
     end
   end
 end
