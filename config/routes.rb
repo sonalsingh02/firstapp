@@ -10,8 +10,7 @@ Rails.application.routes.draw do
   get 'contacts/create'
   get 'contacts/new'
   #get 'home/gallery'
-
-
+  match "*path", to: "api/v1/errors#routing", via: :all
   ActiveAdmin.routes(self)
   devise_for :admin_users, ActiveAdmin::Devise.config
   root to: 'home#index'
