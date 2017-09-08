@@ -3,11 +3,19 @@ class Api::V1::ContactsController < Api::V1::BaseController
 
   def send_message
     @errors = []
-    validate_contact_params(contact_params)
+    check_key
+    validate_contact_params(contact_params) if @errors.empty?
     if @errors.empty?
-      contact = Contact.new(contact_params)
+      validated_params = [] 
+      validated_params = contact_params
+      #Rails.logger.info("****#{upload_params[:name].strip}*********")
+      validated_params[:name] = validated_params[:name].to_s.strip
+      validated_params[:email] = validated_params[:email].to_s.strip
+      validated_params[:mobile_number] = validated_params[:mobile_number].to_s.strip
+      validated_params[:message] = validated_params[:message].to_s.strip
+      contact = Contact.new(validated_params)
       if contact.save
-        render json: { status: "Success", message: "Successful", code: 200 }
+        render json: { status: "Success", message: "Message sent successfully", code: 200 }
       else
         render json: { status: "Failure", message: contact.errors.full_messages, code: 500 }
       end
@@ -31,7 +39,7 @@ class Api::V1::ContactsController < Api::V1::BaseController
   end
 
   def all_letters_or_digits(str)
-    str[/[a-zA-Z0-9]+/]  == str
+    str[/\A[a-zA-Z0-9\s]+\Z/i]  == str
   end
 
   def validate_email(str)
@@ -40,26 +48,46 @@ class Api::V1::ContactsController < Api::V1::BaseController
 
   
 
-   def validate_contact_params params
-    if params[:name] != ""
-      if !all_letters_or_digits(params[:name])
+  def validate_contact_params params
+    unless params[:name].to_s.strip.empty?
+      if !all_letters_or_digits(params[:name].to_s.strip)
         @errors << "Name is invalid"
       end
     else
        @errors << "Name is empty"
     end
-    if params[:email] != ""
-      if !validate_email(params[:email])
+    unless params[:email].to_s.strip.empty?
+      if !validate_email(params[:email].to_s.strip)
         @errors << "Email is invalid"
       end
     else
        @errors << "Email is empty"
     end
-    if params[:mobile_number] == ""
+    if params[:mobile_number].to_s.strip.empty?
       @errors << "Mobile Number is empty"
     end
-    if params[:message] == ""
+    if params[:message].to_s.strip.empty?
        @errors << "Message is empty"
+    end
+  end
+
+  def check_key
+    if(params.has_key?(:name) && params.has_key?(:email) && params.has_key?(:mobile_number) && !params.has_key?(:message))
+      @errors << "Message id key is missing"
+    elsif(params.has_key?(:name) && params.has_key?(:email) && !params.has_key?(:mobile_number) && params.has_key?(:message))
+        @errors << "Mobile Number key is missing"
+    elsif(params.has_key?(:name) && !params.has_key?(:email) && params.has_key?(:mobile_number) && params.has_key?(:message))
+        @errors << "Email key is missing"
+    elsif(!params.has_key?(:name) && params.has_key?(:email) && params.has_key?(:mobile_number) && params.has_key?(:message))
+        @errors << "Name key is missing"
+    elsif(params.has_key?(:name) && params.has_key?(:email) && !params.has_key?(:mobile_number) && !params.has_key?(:message))
+      @errors << "Mobile Number and Message key is missing"
+    elsif(params.has_key?(:name) && !params.has_key?(:email) && !params.has_key?(:mobile_number) && params.has_key?(:message))
+        @errors << "Email and Mobile Number key is missing"
+    elsif(params.has_key?(:name) && !params.has_key?(:email) && params.has_key?(:mobile_number) && !params.has_key?(:message))
+        @errors << "Message and email key is missing"
+    elsif(!params.has_key?(:name) && !params.has_key?(:email) && params.has_key?(:mobile_number) && params.has_key?(:message))
+        @errors << "Name and email key is missing"
     end
   end
 end
