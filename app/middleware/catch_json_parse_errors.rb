@@ -11,7 +11,7 @@ class CatchJsonParseErrors
         error_output = "There was a problem in the JSON you submitted: #{error.class}"
         return [
           400, { "Content-Type" => "application/json" },
-          [ { status: 400, error: error_output }.to_json ]
+          [ { status: "Failure", message: "Incorrect json parameters",code: 500 }.to_json  ]
         ]
       else
         raise error
