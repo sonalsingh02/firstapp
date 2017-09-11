@@ -14,8 +14,8 @@ $(document).ready(function() {
     debug: true,
     rules: {
       "user[password]": {required: true, minlength: 6},
-      "user[password_confirmation]": {required: true, equalTo: "#user_password"}
-      "user[current_password]": {required: true, minlength: 6},
+      "user[password_confirmation]": {required: true, equalTo: "#user_password"},
+      "user[current_password]": {required: true, minlength: 6}
     },
     submitHandler: function(form){
       form.submit();
@@ -33,4 +33,15 @@ $(document).ready(function() {
       form.submit();
     }
   });
+
+  $.ajax({
+          type:'GET',
+          datatype:'json',
+          url: '/galleries/get_image_count',
+          success: function(response) {
+            $("#loader-div").hide();
+            data = "Total Count "+response.data;
+            $('span.count').html(data).css('color', 'green');
+          },
+    });
 });
