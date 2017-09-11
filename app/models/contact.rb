@@ -6,6 +6,6 @@ class Contact < ApplicationRecord
   validates :message ,presence: { message: "This field can't be left blank"}
 
   def send_email
-    AcknowledgementMailer.thankyou_email(self).deliver_now
+    AcknowledgementMailer.delay.thankyou_email(self)
   end
 end
