@@ -11,7 +11,7 @@ gem 'rails', '~> 5.1.1'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 gem "paperclip", "~> 4.2"
-gem 'sidekiq'
+gem 'sidekiq', '>= 3.2.1'
 gem 'record_tag_helper', '~> 1.0'
 gem 'mail_form'
 gem 'simple_form'
@@ -22,6 +22,7 @@ gem 'puma', '~> 3.7'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'jquery-rails'
 gem 'faker', '~>1.2.0'
+gem 'dalli'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
