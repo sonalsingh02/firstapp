@@ -14,8 +14,9 @@ class User < ApplicationRecord
   private
 
   def send_email
+    @password = generate_password
     self.update_attributes(:password => generate_password)
-    AcknowledgementMailer.registration_mail(self).deliver_now
+    AcknowledgementMailer.delay.registration_mail(self,@password)
   end
 
   def generate_password
