@@ -21,11 +21,19 @@ Rails.application.routes.draw do
       collection do
         get :check_name
         get :import_csv_form
+        
         post :import
       end
     end
   end
 
+
+  resources :galleries do
+    collection do
+      get :get_image_count
+    end
+  end
+  
   namespace :api do
       namespace :v1 do
         resources :gallery_pictures, only: [] do
@@ -50,5 +58,6 @@ Rails.application.routes.draw do
   end
 
   match "*path", to: "api/v1/errors#routing", via: :all
-
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 end
