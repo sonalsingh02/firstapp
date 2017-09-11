@@ -5,7 +5,12 @@ class GalleriesController < ApplicationController
 
 
   def index
-    @galleries = @user.galleries.page(params[:page]).order('created_at DESC').per(2)
+    Rails.cache.fetch(:gallerylist, expires_in: 5.minutes) do
+      @user.galleries.all
+    end
+    @galleries = Rails.cache.read(:gallerylist)
+    @galleries = @galleries.page(params[:page]).order('created_at DESC').per(2) if @galleries
+
   end
 
   def new
@@ -52,6 +57,13 @@ class GalleriesController < ApplicationController
     respond_to do |format|
       format.json { render json: !@gallery }
     end
+  end
+
+
+  def get_image_count
+    sleep 3
+    @gallery_count = @user.galleries.count
+    render json: { data: @gallery_count}
   end
 
   def import_csv_form
@@ -130,6 +142,8 @@ private
   def find_gallery
     @gallery = @user.galleries.find_by(id: params[:id])
   end
+
+
 
   #validation of header in a csv file
   def validate_header
