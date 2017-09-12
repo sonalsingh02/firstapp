@@ -39,9 +39,10 @@ $(document).ready(function() {
           datatype:'json',
           url: '/galleries/get_image_count',
           success: function(response) {
-            $("#loader-div").hide();
+            //$("#loader-div").hide();
             data = "Total Count "+response.data;
-            $('span.count').html(data).css('color', 'green');
+            //$('span.count').html(data).css('color', 'green');
+            $('div#loader-div').html(data).css('color', 'green');
           },
     });
 });
