@@ -29,5 +29,19 @@
         "gallery[name]": "Image Name already exists"
       }
     });
+
+    $('form').submit(function() {  
+    //var valuesToSubmit = $(this).serialize();
+      $.ajax({
+              type:'GET',
+              datatype:'json',
+              url: '/galleries/get_image_count',
+              success: function(response) {
+                $("#loader-div").hide();
+                data = "Total Count "+response.data;
+                $('span.count').html(data).css('color', 'green');
+              },
+      });
+    });
   });
 </script>
