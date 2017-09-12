@@ -5,12 +5,9 @@ class GalleriesController < ApplicationController
 
 
   def index
-    Rails.cache.fetch(:gallerylist, expires_in: 5.minutes) do
-      @user.galleries.all
-    end
-    @galleries = Rails.cache.read(:gallerylist)
-    @galleries = @galleries.page(params[:page]).order('created_at DESC').per(2) if @galleries
-
+    @galleries = Kaminari.paginate_array(Rails.cache.fetch(:gallerylist, :expires_in =>  5.minutes) do
+      @user.galleries.order('created_at DESC').to_a
+    end).page(params[:page]).per(2)
   end
 
   def new
@@ -142,8 +139,6 @@ private
   def find_gallery
     @gallery = @user.galleries.find_by(id: params[:id])
   end
-
-
 
   #validation of header in a csv file
   def validate_header
