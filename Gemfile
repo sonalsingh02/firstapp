@@ -15,6 +15,7 @@ gem 'sidekiq', '>= 3.2.1'
 gem 'record_tag_helper', '~> 1.0'
 gem 'mail_form'
 gem 'simple_form'
+gem "activerecord-after-transaction"
 # Use Puma as the app server
 gem 'activeadmin'
 gem 'devise'
