@@ -16,7 +16,9 @@ class User < ApplicationRecord
   def send_email
     @password = generate_password
     self.update_attributes(:password => generate_password)
-    AcknowledgementMailer.delay.registration_mail(self,@password)
+    after_transaction do
+      EmailSenderWorker.perform_async(self.id, @password)
+    end
   end
 
   def generate_password
