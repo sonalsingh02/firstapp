@@ -33,7 +33,7 @@ class GalleriesController < ApplicationController
   end
 
 
-  def edit;
+  def edit
 
   end
 
@@ -117,7 +117,6 @@ class GalleriesController < ApplicationController
       elsif @failed_import >= 1 && @import_count >= 1 && @failed_format == 0
         @msg = "#{@import_count} rows are imported sucessfully , #{@failed_import} rows could not be imported as the file is missing"
       elsif @import_count >= 1 && @failed_import == 0 && @failed_format == 0
-        Rails.logger.info("edgtedfedsfesfewsfs")
         @msg = "#{@import_count} rows are imported sucessfully"
       end
       redirect_to user_galleries_url(@user), notice: "#{@msg}"
@@ -143,115 +142,68 @@ private
   #validation of header in a csv file
   def validate_header
     allowed_attributes = %w(name image)
-    @errors = []
+    error_hash = { "name_error" => "Header 'name' is missing or written in incorrect postition or not spelled correctly","image_error" => "Header 'image' is missing or written in incorrect position or not spelled correctly" ,"both_header" => "Both Headers are missing or written in incorrect postition or not spelled correctly","empty_file" => "CSV file is empty","unexpected_header" => "Headers more than what is expected","unexpected_data" => "Data is more than what is expected" ,"invalid_name" => "In Row no #{row_num} : Name should contain letters or digits only!","invalid_image" => "In Row no #{row_num} : Image URL is incorrect","missing_name" => "In Row no #{row_num} : Name is missing!", "missing_image" => "In Row no #{row_num} : Image URL is missing!","missing_content" => "Content is missing"}
     @headers = CSV.open(@file,'r') { |csv| csv.first } #To find first row of csv file i.e. header
     # check if headers are valid
     if @headers && !@headers.empty? # check if headers are present
       @headers = CSV.read(@file).flatten
-      if CSV.read(@file).count == 2
+      if CSV.read(@file).count == 2 || CSV.read(@file).count > 2
         count = allowed_attributes.count - @headers.count
         if count > 0
           #in this case either name is missing or image is missing or both
           if allowed_attributes[0].downcase != @headers[0].try(:downcase) && allowed_attributes[1].downcase != @headers[1].try(:downcase)
-              @errors << "Both Headers are missing"
+              @errors << error_hash['both_header']
           end
           if allowed_attributes[0].downcase != @headers[0].try(:downcase)
-              @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
+              @errors << error_hash['name_error']
           end
           if allowed_attributes[1].downcase != @headers[1].try(:downcase)
-              @errors << "Header 'image' is missing or written in incorrect postition or not spelled correctly"
+              @errors << error_hash['image_error']
           end
         end
         if count < 0
           #in this case we will check if header data is proper or not
           if allowed_attributes[0].downcase != @headers[0].try(:downcase)
-            @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
+            @errors << error_hash['name_error']
           end
           if allowed_attributes[1].downcase != @headers[1].try(:downcase)
-            @errors << "Header 'image' is missing or written in incorrect postition or not spelled correctly"
-          end
-        end
-        if count > 0
-          #in this case either name is missing or image is missing or both
-          if allowed_attributes[0].downcase != @headers[0].try(:downcase) && allowed_attributes[1].downcase != @headers[1].try(:downcase)
-            @errors << "Both Headers are missing"
-          end
-          if allowed_attributes[0].downcase != @headers[0].try(:downcase)
-            @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
-          end
-          if allowed_attributes[1].downcase != @headers[1].try(:downcase)
-            @errors << "Header 'image' is missing or written in incorrect postition or not spelled correctly"
-          end
-        end
-      elsif CSV.read(@file).count > 2
-        count = allowed_attributes.count - @headers.count
-        if count > 0
-          #in this case either name is missing or image is missing or both
-          if allowed_attributes[0].downcase != @headers[0].try(:downcase) && allowed_attributes[1].downcase != @headers[1].try(:downcase)
-              @errors << "Both Headers are missing"
-          end
-          if allowed_attributes[0].downcase != @headers[0].try(:downcase)
-              @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
-          end
-          if allowed_attributes[1].downcase != @headers[1].try(:downcase)
-              @errors << "Header 'image' is missing or written in incorrect postition or not spelled correctly"
-          end
-        end
-        if count < 0
-          #in this case we will check if header data is proper or not
-          if allowed_attributes[0].downcase != @headers[0].try(:downcase)
-            @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
-          end
-          if allowed_attributes[1].downcase != @headers[1].try(:downcase)
-            @errors << "Header 'image' is missing or written in incorrect postition or not spelled correctly"
-          end
-        end
-        if count > 0
-          #in this case either name is missing or image is missing or both
-          if allowed_attributes[0].downcase != @headers[0].try(:downcase) && allowed_attributes[1].downcase != @headers[1].try(:downcase)
-            @errors << "Both Headers are missing"
-          end
-          if allowed_attributes[0].downcase != @headers[0].try(:downcase)
-            @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
-          end
-          if allowed_attributes[1].downcase != @headers[1].try(:downcase)
-            @errors << "Header 'image' is missing or written in incorrect postition or not spelled correctly"
+            @errors << error_hash['image_error']
           end
         end
       elsif CSV.read(@file).count == 1 #only one row exists
         count = allowed_attributes.count - @headers.count
         if count == 0
           if allowed_attributes[0].downcase != @headers[0].try(:downcase) && allowed_attributes[1].downcase != @headers[1].try(:downcase)
-              @errors << "Both Headers are missing or written in incorrect postition or not spelled correctly"
+              @errors << error_hash['both_header']
           end
           if allowed_attributes[0].downcase != @headers[0].try(:downcase)
-              @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
+              @errors << error_hash['name_error']
           end
           if allowed_attributes[1].downcase != @headers[1].try(:downcase)
-              @errors << "Header 'image' is missing or written in incorrect postition or not spelled correctly"
+              @errors << error_hash['image_error']
           end
         end
         if count > 0 #less than what is expected
           if @headers[0] && @headers[1] && allowed_attributes[0].downcase != @headers[0].try(:downcase) && allowed_attributes[1].downcase != @headers[1].try(:downcase)
-                @errors << "Both Headers are missing or written in incorrect postition or not spelled correctly"
+                @errors << error_hash['both_header']
           end
           if @headers[0] && allowed_attributes[0].downcase != @headers[0].try(:downcase)
-              @errors << "Header 'name' is missing or written in incorrect postition or not spelled correctly"
+              @errors << error_hash['name_error']
           end
           if @headers[0] && allowed_attributes[1].downcase != @headers[0].try(:downcase)
-              @errors << "Header 'image' is missing or written in incorrect postition or not spelled correctly"
+              @errors << error_hash['image_error']
           end
         end
         if count < 0 #more than what is expected
-            @errors << "Headers more than what is expected"
+            @errors << error_hash['unexpected_header']
         end
       elsif CSV.read(@file).count == 0 #no row exists
-        @errors << "CSV file is empty"
+        @errors << error_hash['empty_file']
       else
-        @errors << "CSV file is empty"
+        @errors << error_hash['empty_file']
       end
     else
-      @errors << "CSV file is empty"
+      @errors << error_hash['empty_file']
     end
     @errors
   end
@@ -263,10 +215,10 @@ private
   def validate_name(row, row_num)
     unless row[0].empty?
       if !all_letters_or_digits(row[0])
-        @errors << "In Row no #{row_num} : Name should contain letters or digits only!"
+        @errors << error_hash['invalid_name']
       end
     else
-      @errors << "In Row no #{row_num} : Name is missing!"
+      @errors << error_hash['missing_name']
     end
   end
 
@@ -284,21 +236,21 @@ private
       if validate_url?(row[1])
         return true
       else
-        @errors << "In Row no #{row_num} : Image URL is incorrect"
+        @errors << error_hash['invalid_image']
         return false
       end
     else
-      @errors << "In Row no #{row_num} : Image URL is missing!"
+      @errors << error_hash['missing_image']
     end
   end
 
   def check_value(row,row_num)
     unless row[0].empty?
        if !all_letters_or_digits(row[0])
-          @errors << "In Row no #{row_num} : Name should contain only letters and digits"
+          @errors << error_hash['invalid_name']
         end
         if !validate_url?(row[0])
-          @errors << "In Row no #{row_num} : Image URL is incorrect"
+          @errors << error_hash['invalid_image']
         end
     end
   end
@@ -316,7 +268,7 @@ private
           validate_image(row,index+1)
         end
         if row.length > 2
-          @errors << "Data is more than what is expected"
+          @errors << error_hash['unexpected_data']
         end
       elsif @row.length  > 2
         if row.length == 1 # if true that means either name data is missing or image data is missing
@@ -327,13 +279,13 @@ private
           validate_image(row,index+1)
         end
         if row.length > 2
-          @errors << "Data is more than what is expected"
+          @errors << error_hash['unexpected_data']
         end
       else
-        @errors << "Content is missing"
+        @errors << error_hash['missing_content']
       end
     else
-      @errors << "Content is missing"
+      @errors << error_hash['missing_content']
     end
   end
 end
