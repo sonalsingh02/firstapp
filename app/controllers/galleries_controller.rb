@@ -12,7 +12,7 @@ class GalleriesController < ApplicationController
 
   def new
     @gallery = @user.galleries.build
-    Rails.logger.info("#{@gallery}")
+    #Rails.logger.info("#{@gallery}")
     respond_to do |format|
       format.js
     end
@@ -50,7 +50,7 @@ class GalleriesController < ApplicationController
   end
 
   def check_name
-    @gallery = @user.galleries.find_by(name: params[:gallery][:name])
+      @gallery = @user.galleries.where('id != ?',params[:id]).where('name == ?',params[:gallery][:name]).first
     respond_to do |format|
       format.json { render json: !@gallery }
     end
