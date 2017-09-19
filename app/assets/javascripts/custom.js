@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).on('turbolinks:load', function() {
   $("#new_user").validate({
     debug: true,
     rules: {
@@ -34,6 +34,18 @@ $(document).ready(function() {
     }
   });
 
+
+  $('div.inner-content').click(function(e) {
+    $(this).css('color', 'red');
+    e.stopPropagation();
+    }).mouseover(function() {
+      $(this).css('color', 'green');
+    }).mouseout(function() {
+      $(this).css('color', '#ffd700');
+  });
+
+ 
+
   $.ajax({
           type:'GET',
           datatype:'json',
@@ -45,4 +57,6 @@ $(document).ready(function() {
             $('div#loader-div').html(data).css('color', 'green');
           },
     });
+
+
 });
