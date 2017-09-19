@@ -1,2 +1,4 @@
 $('form').hide();
-$('div#<%= dom_id(@gallery) %>').find('p').html("<%= @gallery.name %>");
+$('div#<%= dom_id(@gallery) %>').find('a').text("<%= @gallery.name %>").show();
+
+
