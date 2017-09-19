@@ -19,10 +19,11 @@
 <script>
   $(document).ready(function() {
     var user_id = <%=j @user.id.to_s %>;
+    var gall_id = <%=j @gallery.id.to_s %>;
     $("#new_gallery").validate({
       debug: true,
       rules: {
-        "gallery[name]": {required: true, remote:"/users/user_id/galleries/check_name"},
+        "gallery[name]": {required: true, remote:"/users/"+user_id+"/galleries/"+gall_id+"/check_name"},
         "gallery[image]": {required: true, accept: "image/*"}
       },
       messages: {
@@ -31,7 +32,6 @@
     });
 
     $('form').submit(function() {  
-    //var valuesToSubmit = $(this).serialize();
       $.ajax({
               type:'GET',
               datatype:'json',
