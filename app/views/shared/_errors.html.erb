@@ -1,0 +1,12 @@
+<% if object.errors.any? %>
+  <div class = "panel panel-warning errors" >
+    <div class = "panel-heading" >
+      Errors Found:
+    </div>
+    <div class = "panel-body" >
+      <% object.errors.full_messages.each do |message| %>
+        <%= message %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
