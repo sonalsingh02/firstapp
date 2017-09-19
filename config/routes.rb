@@ -19,14 +19,18 @@ Rails.application.routes.draw do
   resources :users do
     resources :galleries do
       collection do
-        get :check_name
         get :import_csv_form
-        
         post :import
       end
     end
   end
-
+  resources :users do
+    resources :galleries do
+      member do
+        get :check_name
+      end
+    end
+  end
 
   resources :galleries do
     collection do
