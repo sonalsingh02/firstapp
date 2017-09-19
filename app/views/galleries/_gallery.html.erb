@@ -4,11 +4,11 @@
       <div class="col-xs-4"></div>
       <div class="col-xs-4" style="display:inline; background-color:#E0E0E0;width:33%">
         <%= div_for gallery do %>
-        <div class="panel">
-          <%= image_tag gallery.image.url(:large) %><br/>
-          <p><%= gallery.name %></p>
-          <%= link_to "Edit", edit_user_gallery_path(@user, gallery), remote: true %><br/>
-        </div>
+          <div class="panel">
+            <%= image_tag gallery.image.url(:large) %><br/>
+            <%= link_to "#{gallery.name}", edit_user_gallery_path(@user, gallery), id: "gall_#{gallery.id}",  class: "gallery_name_link"  ,remote: true %><br/>
+
+           </div>
         <% end %>
       </div>
       <div class="col-xs-4"></div>
@@ -27,3 +27,13 @@
     <div class="col-xs-4"></div>
   </div>
 </div>
+
+
+<script>
+$(document).ready(function () {
+  $('a.gallery_name_link').click(function(e) {
+    var id = $(this).attr('id');
+    $('.col-xs-4').find( "a:hidden" ).not('gall_'+id).show();
+  });
+});
+</script>
